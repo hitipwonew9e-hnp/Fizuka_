@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coin Flip Simulation</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+    }
+    table {
+        border-collapse: collapse;
+        margin-top: 20px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    th, td {
+        border: 1px solid black;
+        padding: 8px;
+        
+    }
+
+    .b{
+        font-size: 1rem;
+        margin-top: 5%;
+         color: rgb(0, 0, 0);
+    }
+</style>
+</head>
+<body>
+<h1>Coin Flip Simulation</h1>
+<label for="numFlips">Number of Flips:</label>
+<input type="number" id="numFlips" min="1" value="10">
+<button onclick="flipCoin()">Згенерувати</button>
+<div id="result"></div>
+
+<h1 class="b">
+    1. Увести число в поле (128)
+</h1>
+<h1 class="b">
+    2. Нажати на кнопку "згенерувати" 
+</h1>
+
+<script>
+    function flipCoin() {
+        var numFlips = document.getElementById("numFlips").value;
+        var totalHeads = 0;
+        var totalTails = 0;
+        var resultString = "";
+
+        for (var i = 0; i < numFlips; i++) {
+            var random = Math.random();
+            if (random < 0.5) {
+                totalHeads++;
+                resultString += "1 ";
+            } else {
+                totalTails++;
+                resultString += "2 ";
+            }
+        }
+
+        var resultElement = document.getElementById("result");
+        resultElement.innerHTML = "<div>Кількість кидків: " + numFlips + "</div>";
+        
+        var additionalResults = simulateAdditionalFlips(totalHeads, totalTails);
+        resultElement.innerHTML += additionalResults;
+    }
+
+    function simulateAdditionalFlips(totalHeads, totalTails) {
+        var remainingHeads = totalHeads + totalTails;
+        var remainingTails = totalTails;
+        var tableHtml = "<table><tr><th>Кількість кидків n </th><th>Кількість 'ядер', що не розпалося N</th> <th>Кількість 'ядер', що розпалося N'</th></tr>";
+
+        tableHtml += "<tr><td>0</td><td>" + remainingHeads + "</td><td>0 </td></tr>";
+
+        for (var i = 1; i <= 8; i++) {
+            var heads = 0;
+            var tails = 0;
+            for (var j = 0; j < remainingHeads; j++) {
+                var random = Math.random();
+                if (random < 0.5) {
+                    heads++;
+                }
+            }
+            tails = remainingHeads - heads;
+            remainingHeads = heads;
+            remainingTails = tails;
+            tableHtml += "<tr><td>" + i + "</td><td>" + heads + "</td><td>" + tails + "</td></tr>";
+        }
+
+        tableHtml += "</table>";
+
+        return tableHtml;
+    }
+</script>
+</body>
+</html>
